@@ -13,39 +13,86 @@ Parser::Parser(const string& _input, const string& _output) : input(_input), out
 void Parser::ParseazaEcuatie() {
 	output.clear();
 	string operatori;
+	string nrCurent;
 	for (char c : input) {
-		if (isdigit(c) || isspace(c)) {
-			output += c;
+		if (eNumar(c) || isspace(c)) {
+			nrCurent += c;
+		}
+		else if (c == '.') {
+			if (!nrCurent.empty()) {
+				nrCurent += c;
+			}
 		}
 		else if (eOperator(c)) {
-			while (!operatori.empty() && operatori.back() != '(' && ordineOp(c) <= ordineOp(operatori.back())) {
-				output += operatori.back();
-				operatori.pop_back();
+			if (!nrCurent.empty()) {
+				output += nrCurent + ' ';
+				nrCurent.clear();
 			}
-			operatori += c;
+			procesareOp(c, operatori);
+			output += ' ';
 		}
 		else if (c == '(' || c == '[') {
 			operatori += c;
 		}
-		else if (c == ')' || c == ']') {
-			char okParanteze;
-			if (c == ')') {
-				okParanteze = '(';
+		else if (c == ')') {
+			if (!nrCurent.empty()) {
+				output += nrCurent + ' ';
+				nrCurent.clear();
 			}
-			else if (c == ']') {
-				okParanteze = '[';
-			}
-			while (!operatori.empty() && operatori.back() != okParanteze) {
-				output += operatori.back();
-				operatori.pop_back();
-			}
-			operatori.pop_back();
+			procesareParantezaInchisaR(c, operatori);
+			output += ' ';
 		}
+		else if (c == ']') {
+			if (!nrCurent.empty()) {
+				output += nrCurent + ' ';
+				nrCurent.clear();
+			}
+			procesareParantezaInchisaP(c, operatori);
+			output += ' ';
+		}
+	}
+	if (!nrCurent.empty()) {
+		output += nrCurent + ' ';
 	}
 	while (!operatori.empty()) {
 		output += operatori.back();
 		operatori.pop_back();
 	}
+	output = removePara(output);
+}
+
+void Parser::procesareOp(char c, string& operatori) {
+	while (!operatori.empty() && operatori.back() != '(' && ordineOp(c) <= ordineOp(operatori.back())) {
+		output += operatori.back();
+		operatori.pop_back();
+	}
+	operatori += c;
+}
+
+void Parser::procesareParantezaInchisaR(char c, string& operatori) {
+	while (!operatori.empty() && operatori.back() != '(') {
+		output += operatori.back();
+		operatori.pop_back();
+	}
+	operatori.pop_back();
+}
+
+void Parser::procesareParantezaInchisaP(char c, string& operatori) {
+	while (!operatori.empty() && operatori.back() != '[') {
+		output += operatori.back();
+		operatori.pop_back();
+	}
+	operatori.pop_back();
+}
+
+string Parser::removePara(string& output) {
+	string rez;
+	for (int i = 0; i < output.size(); i++) {
+		char crt = output[i];
+		if (crt != '(' && crt != '[' && crt != ')' && crt != ']')
+			rez += crt;
+	}
+	return rez;
 }
 
 string Parser::getInput() const{
@@ -54,7 +101,7 @@ string Parser::getInput() const{
 
 void Parser::setInput(const string& _input) {
 	input = _input;
-
+	output.clear();
 }
 
 void Parser::setOutput(const string& _output) {
@@ -66,6 +113,10 @@ void Parser::setOutput(const string& _output) {
 ostream& operator<<(ostream& os, Parser p) {
 	os << p.output;
 	return os;
+}
+
+bool Parser::eNumar(char c) {
+	return (isdigit(c) || c == '.');
 }
 
 bool Parser::eOperator(char c) {

@@ -20,8 +20,17 @@ public:
 	void setOutput(const string& _output);
 
 	void ParseazaEcuatie();
+
+	void procesareOp(char c, string& operatori);
+	void procesareParantezaInchisaR(char c, string& operatori);
+	void procesareParantezaInchisaP(char c, string& operatori);
+
+	bool eNumar(char c);
 	bool eOperator(char c);
+
 	int ordineOp(char op);
+
+	string removePara(string& output);
 
 	friend istream& operator>>(istream&, Parser&);
 	friend ostream& operator<<(ostream&, Parser);
