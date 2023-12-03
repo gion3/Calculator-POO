@@ -7,7 +7,15 @@
 Parser::Parser(){}
 
 Parser::Parser(const string& _input, const string& _output) : input(_input), output(_output) {
-
+	if (input.empty()) {
+		cerr << "Fara input. Inputul va fi setat cu valoarea default 0" << endl;
+		input = "0";
+	}
+	if (output.empty()) {
+		cerr << "Fara output. Ouputul va fi setat cu valoarea default 0" << endl;
+		output = "0";
+	}
+	nrInputuri++;
 }
 
 void Parser::ParseazaEcuatie() {
@@ -57,6 +65,7 @@ void Parser::ParseazaEcuatie() {
 	while (!operatori.empty()) {
 		output += operatori.back();
 		operatori.pop_back();
+		output += ' ';
 	}
 	output = removePara(output);
 }
@@ -73,6 +82,7 @@ void Parser::procesareParantezaInchisaR(char c, string& operatori) {
 	while (!operatori.empty() && operatori.back() != '(') {
 		output += operatori.back();
 		operatori.pop_back();
+		output += ' '; 
 	}
 	operatori.pop_back();
 }
@@ -81,6 +91,7 @@ void Parser::procesareParantezaInchisaP(char c, string& operatori) {
 	while (!operatori.empty() && operatori.back() != '[') {
 		output += operatori.back();
 		operatori.pop_back();
+		output += ' '; 
 	}
 	operatori.pop_back();
 }
@@ -93,6 +104,10 @@ string Parser::removePara(string& output) {
 			rez += crt;
 	}
 	return rez;
+}
+
+int Parser::getNrInputuri() {
+	return nrInputuri;
 }
 
 string Parser::getInput() const{
@@ -113,6 +128,10 @@ string Parser::getOutput() const {
 	return output;
 }
 
+istream& operator>>(istream& is, Parser& p) {
+	is >> p.input;
+	return is;
+}
 
 ostream& operator<<(ostream& os, Parser p) {
 	os << p.output;

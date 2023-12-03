@@ -10,9 +10,12 @@ class Parser
 {private:
 	string input;
 	string output;
+	static int nrInputuri;
 public:
 	Parser();
 	Parser(const string& _input, const string& _output);
+
+	static int getNrInputuri();
 
 	string getInput() const;
 	void setInput(const string& _input);
@@ -36,6 +39,5 @@ public:
 	friend istream& operator>>(istream&, Parser&);
 	friend ostream& operator<<(ostream&, Parser);
 
-	//~Parser();
 };
 

@@ -1,5 +1,14 @@
 #include "myStack.h"
 
+myStack::myStack(){}
+
+const vector<double>& myStack::getStack() const {
+	return stack;
+}
+
+void myStack::setStack(const vector<double>& _Stack) {
+	stack = _Stack;
+}
 
 void myStack::push(double valoare) {
 	stack.push_back(valoare);

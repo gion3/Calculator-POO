@@ -1,5 +1,7 @@
 #include "Solver.h"
 
+Solver::Solver(){}
+
 double Solver::solve(const string& postfix) {
 	myStack operatori;
 	istringstream iss(postfix);
@@ -71,8 +73,3 @@ void Solver::procesareOp(const string& op, myStack& termeni) {
 		termeni.push(pow(termen1, 1.0 / termen2));
 	}
 }
-
-/*ostream& operator<<(ostream& os, Solver s) {
-	os << s.solve(const string& postfix);
-	return os;
-}*/

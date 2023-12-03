@@ -10,13 +10,11 @@ using namespace std;
 
 class Solver
 {
-private:
 public:
+	Solver();
 	double solve(const string& postfix);
 	bool eTermen(const string& token);
 	bool eOperator(const string& token);
 	void procesareOp(const string& op, myStack& operatori);
-
-	//friend ostream& operator<<(ostream&, Solver);
 };
 

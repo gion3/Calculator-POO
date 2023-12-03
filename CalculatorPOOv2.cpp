@@ -5,27 +5,38 @@
 #include <string>
 #include <sstream>
 #include <cctype>
+#include <iomanip>
 
 using namespace std;
+
+int Parser::nrInputuri = 0;
 
 int main()
 {
     string input;
-    string token;
+    string exitstr = "exit";
     Parser p;
     Solver s;
     double rezultat;
 
-    cout << "Introduceti expresia: ";
-    getline(cin, input);
-    p.setInput(input);
-    
-    p.ParseazaEcuatie();
+    do {
+        cout << endl << "Introduceti expresia: "<< endl;
 
-    rezultat = s.solve(p.getOutput());
+        getline(cin, input);
+        p.setInput(input);
 
-    cout << rezultat << endl;
-    //cout << p;
+        p.ParseazaEcuatie();
+
+        rezultat = s.solve(p.getOutput());
+
+        if (rezultat == trunc(rezultat) || rezultat == ( -1 * trunc(rezultat))) {
+            cout << endl << "Rezultat: " << rezultat << endl;
+        }
+        else {
+            cout << endl << "Rezultat: " << fixed << setprecision(4) << rezultat << endl;
+        }
+    } while (p.getInput() != exitstr);
+
     return 0;
 }
 
