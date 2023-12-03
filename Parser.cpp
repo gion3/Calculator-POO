@@ -109,6 +109,10 @@ void Parser::setOutput(const string& _output) {
 
 }
 
+string Parser::getOutput() const {
+	return output;
+}
+
 
 ostream& operator<<(ostream& os, Parser p) {
 	os << p.output;

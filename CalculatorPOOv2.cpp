@@ -1,4 +1,6 @@
 #include "Parser.h"
+#include "Solver.h"
+#include "myStack.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -11,6 +13,8 @@ int main()
     string input;
     string token;
     Parser p;
+    Solver s;
+    double rezultat;
 
     cout << "Introduceti expresia: ";
     getline(cin, input);
@@ -18,11 +22,10 @@ int main()
     
     p.ParseazaEcuatie();
 
-    istringstream iss(input);
+    rezultat = s.solve(p.getOutput());
 
-
-
-    cout << p;
+    cout << rezultat << endl;
+    //cout << p;
     return 0;
 }
 

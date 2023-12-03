@@ -18,6 +18,7 @@ public:
 	void setInput(const string& _input);
 
 	void setOutput(const string& _output);
+	string getOutput() const;
 
 	void ParseazaEcuatie();
 
