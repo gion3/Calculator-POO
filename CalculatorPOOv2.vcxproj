@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="CalculatorPOOv2.cpp" />
     <ClCompile Include="myStack.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Solver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Calculator.h" />
     <ClInclude Include="myStack.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Solver.h" />

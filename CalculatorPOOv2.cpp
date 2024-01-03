@@ -1,7 +1,9 @@
-#include "Parser.h"
+﻿#include "Parser.h"
 #include "Solver.h"
 #include "myStack.h"
+#include "Calculator.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <cctype>
@@ -11,32 +13,42 @@ using namespace std;
 
 int Parser::nrInputuri = 0;
 
-int main()
-{
-    string input;
-    string exitstr = "exit";
-    Parser p;
-    Solver s;
-    double rezultat;
+int main() {
+    Calculator calculator;
 
+    int optiune;
     do {
-        cout << endl << "Introduceti expresia: "<< endl;
+        calculator.afiseazaMeniu();
+        std::cin >> optiune;
+        std::cin.ignore();  // Ignoră newline rămas în buffer
 
-        getline(cin, input);
-        p.setInput(input);
-
-        p.ParseazaEcuatie();
-
-        rezultat = s.solve(p.getOutput());
-
-        if (rezultat == trunc(rezultat) || rezultat == ( -1 * trunc(rezultat))) {
-            cout << endl << "Rezultat: " << rezultat << endl;
+        switch (optiune) {
+        case 1:
+            calculator.introducereEcuatieTastatura();
+            break;
+        case 2: {
+            std::cout << "Introduceti numele fisierului: ";
+            std::string numeFisier;
+            std::getline(std::cin, numeFisier);
+            calculator.citireEcuatiiFisier(numeFisier);
+            break;
         }
-        else {
-            cout << endl << "Rezultat: " << fixed << setprecision(4) << rezultat << endl;
+        case 3:
+            calculator.salveazaRezultat();
+            break;
+        case 4:
+            calculator.incarcaVariabila();
+            break;
+        case 5:
+            calculator.afiseazaRezultateSalvate();
+            break;
+        case 6:
+            std::cout << "La revedere!\n";
+            break;
+        default:
+            std::cerr << "Optiune invalida.\n";
         }
-    } while (p.getInput() != exitstr);
+    } while (optiune != 6);
 
     return 0;
 }
-
