@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 Calculator::Calculator() {
 }
@@ -29,15 +30,34 @@ void Calculator::introducereEcuatieTastatura() {
     std::string input;
     std::cout << "Introduceti expresia: ";
     std::getline(std::cin, input);
+    bool err = false;
+    double intPart = 0, fractPart = 0;
+    try {
+        parser.setInput(input);
+        parser.ParseazaEcuatie();
+    }
+    catch (const std::invalid_argument& e) {
+        std::cerr << "Eroare la parsarea expresiei: " << e.what() << std::endl;
+        err = true;
+    }
+    if (!err) {
+        double rezultat = solver.solve(parser.getOutput());
 
-    parser.setInput(input);
-    parser.ParseazaEcuatie();
+        rezultate.push_back(rezultat);
 
-    double rezultat = solver.solve(parser.getOutput());
+        if (abs(rezultat) == 0) {
+            rezultat = 0;
+        }
 
-    rezultate.push_back(rezultat);
+        fractPart = modf(rezultat, &intPart);
 
-    std::cout << "Rezultat: " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+        if (fractPart == 0) {
+            std::cout << "Rezultat: " << rezultat << std::endl;
+        }
+        else {
+            std::cout << "Rezultat: " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+        }
+    }
 }
 
 int Calculator::getNumarLiniiFisier(const std::string& numeFisier) {
@@ -61,8 +81,8 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
     afiseazaSubmeniuCitireFisier();
     int optiune;
     std::cin >> optiune;
-    std::cin.ignore();  // Ignoră newline rămas în buffer
-
+    std::cin.ignore();  
+    double intPart = 0, fractPart = 0;
     if (optiune < 1 || optiune > 3) {
         std::cerr << "Optiune invalida pentru submeniu citire fisier.\n";
         return;
@@ -85,20 +105,44 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
         std::string input;
         std::getline(inputFile, input);
 
-        parser.setInput(input);
-        parser.ParseazaEcuatie();
+        try {
+            parser.setInput(input);
+            parser.ParseazaEcuatie();
+        }
+        catch (const std::invalid_argument& e) {
+            std::cerr << "Eroare la parsarea expresiei "<<"["<<i<<"] din fisier: " << e.what() << std::endl;
+            continue;  
+        }
+
         double rezultat = solver.solve(parser.getOutput());
 
         rezultate.push_back(rezultat);
 
         if (optiune == 1) {
-            std::cout << "Rezultat pentru expresia " << "[" << i << "]"<< " din fisier : " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+            if (abs(rezultat) == 0) {
+                rezultat = 0;
+            }
+            fractPart = modf(rezultat, &intPart);
+            if (fractPart == 0) {
+                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << rezultat << std::endl;
+            }
+            else {
+                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+            }
         }
         else if (optiune == 2) {
-            outputFile << "Rezultat: " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+            if (abs(rezultat) == 0) {
+                rezultat = 0;
+            }
+            fractPart = modf(rezultat, &intPart);
+            if (fractPart == 0) {
+                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << rezultat << std::endl;
+            }
+            else {
+                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << std::fixed << std::setprecision(4) << rezultat << std::endl;
+            }
         }
         else if (optiune == 3) {
-            // Implementează scrierea în fișierul binar
             std::ofstream binFile("rezultate.bin", std::ios::binary | std::ios::app);
             binFile.write(reinterpret_cast<char*>(&rezultat), sizeof(rezultat));
             binFile.close();
@@ -139,7 +183,6 @@ void Calculator::salveazaRezultat() {
     std::cout << "Introduceti numele pentru variabila salvata: ";
     std::cin >> numeVariabila;
 
-    // Implementează scrierea în fișierul text
     std::ofstream textFile("variabile.txt", std::ios::app);
     textFile << numeVariabila << " " << rezultate[index - 1] << std::endl;
     textFile.close();

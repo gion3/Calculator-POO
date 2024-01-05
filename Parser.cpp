@@ -22,19 +22,26 @@ void Parser::ParseazaEcuatie() {
 	output.clear();
 	string operatori;
 	string nrCurent;
+	bool areVirgula = false;
+	bool virgulaErr = false;
 	for (char c : input) {
 		if (eNumar(c) || isspace(c)) {
 			nrCurent += c;
 		}
 		else if (c == '.') {
+			if (!nrCurent.empty() && areVirgula) {
+				throw invalid_argument("Eroare: Termen cu prea multe virgule!");
+			}
 			if (!nrCurent.empty()) {
 				nrCurent += c;
+				areVirgula= true;
 			}
 		}
 		else if (eOperator(c)) {
 			if (!nrCurent.empty()) {
 				output += nrCurent + ' ';
 				nrCurent.clear();
+				areVirgula = false;
 			}
 			procesareOp(c, operatori);
 			output += ' ';
@@ -74,6 +81,7 @@ void Parser::procesareOp(char c, string& operatori) {
 	while (!operatori.empty() && operatori.back() != '(' && ordineOp(c) <= ordineOp(operatori.back())) {
 		output += operatori.back();
 		operatori.pop_back();
+		output += ' ';
 	}
 	operatori += c;
 }
@@ -139,7 +147,7 @@ ostream& operator<<(ostream& os, Parser p) {
 }
 
 bool Parser::eNumar(char c) {
-	return (isdigit(c) || c == '.');
+	return (isdigit(c));
 }
 
 bool Parser::eOperator(char c) {
