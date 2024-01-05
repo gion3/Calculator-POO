@@ -20,7 +20,7 @@ int main() {
     do {
         calculator.afiseazaMeniu();
         std::cin >> optiune;
-        std::cin.ignore();  // Ignoră newline rămas în buffer
+        std::cin.ignore();
 
         switch (optiune) {
         case 1:
