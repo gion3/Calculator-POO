@@ -1,10 +1,34 @@
 ﻿#include "Calculator.h"
+#include "Utils.h"
 #include <fstream>
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 Calculator::Calculator() {
+}
+
+void Calculator::afisare() {
+    cout << "Afisare prin metoda virtuala mostenita";
+}
+
+void Calculator::scriereFisier(double rez, const string nume, const int nrEc) {
+    double intPart = 0;
+    double fractPart = modf(rez, &intPart);
+    ofstream of(nume,ios::app);
+    if (of.is_open()) {
+        if (abs(rez) == 0) {
+            rez = 0;
+            of <<"Rezultatul expresiei ["<<nrEc<<"]: "<< rez << endl;
+        }
+        else if (fractPart == 0) {
+            of<< "Rezultatul expresiei [" << nrEc << "]: " << rez << endl;
+        }
+        else {
+            of <<"Rezultatul expresiei [" << nrEc << "]: " << fixed << setprecision(4) << rez << endl;
+        }
+    }
 }
 
 void Calculator::afiseazaMeniu() {
@@ -94,11 +118,12 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
         return;
     }
     std::string numeFisierRezultate;
-    std::ofstream outputFile(numeFisierRezultate);
     if (optiune == 2) {
         std::cout << "Introduceti numele fisierului pentru rezultate: ";
         std::getline(std::cin, numeFisierRezultate);
-
+        std::ofstream outputFile(numeFisierRezultate);
+        outputFile.clear();
+        outputFile.close();
     }
         int numarLinii = getNumarLiniiFisier(numeFisier);
     for (int i = 1; i < numarLinii + 1; ++i) {
@@ -131,16 +156,7 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
             }
         }
         else if (optiune == 2) {
-            if (abs(rezultat) == 0) {
-                rezultat = 0;
-            }
-            fractPart = modf(rezultat, &intPart);
-            if (fractPart == 0) {
-                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << rezultat << std::endl;
-            }
-            else {
-                std::cout << "Rezultat pentru expresia " << "[" << i << "]" << " din fisier : " << std::fixed << std::setprecision(4) << rezultat << std::endl;
-            }
+                scriereFisier(rezultat, numeFisierRezultate,i);
         }
         else if (optiune == 3) {
             std::ofstream binFile("rezultate.bin", std::ios::binary | std::ios::app);
@@ -150,9 +166,8 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
     }
 
     inputFile.close();
-    outputFile.close();
     if (optiune == 2) {
-        std::cout << "Rezultatele au fost salvate in fisierul: " << numeFisierRezultate << std::endl;
+        std::cout << "Rezultatele ecuatiilor fara erori au fost salvate in fisierul: " << numeFisierRezultate << std::endl;
     }
     else if (optiune == 3) {
         std::cout << "Rezultatele au fost salvate in fisierul binar. " << endl;

@@ -2,6 +2,7 @@
 #include "Solver.h"
 #include "myStack.h"
 #include "Calculator.h"
+#include "Utils.h"
 #include <iostream>
 #include <fstream>
 #include <string>
