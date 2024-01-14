@@ -117,7 +117,7 @@ void Calculator::citireEcuatiiFisier(const std::string& numeFisier) {
         double rezultat = solver.solve(parser.getOutput());
 
         rezultate.push_back(rezultat);
-
+ 
         if (optiune == 1) {
             if (abs(rezultat) == 0) {
                 rezultat = 0;
