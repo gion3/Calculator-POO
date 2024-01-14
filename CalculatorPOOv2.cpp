@@ -17,7 +17,7 @@ int Parser::nrInputuri = 0;
 int main(int argc, char* argv[]) {
     Calculator calculator;
 
-    // Daca sunt furnizate argumente in linia de comanda, se considera ca prima argument este ecuatia
+    // Daca avem argument in command line rezolvam ecuatia, altfel afisam meniul
     if (argc > 1) {
         string input(argv[1]);
         Parser p;
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
         int optiune;
         do {
             calculator.afiseazaMeniu();
-            std::cin >> optiune;
-            std::cin.ignore();
+            cin >> optiune;
+            cin.ignore();
 
             switch (optiune) {
             case 1:
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
             case 2: {
                 std::cout << "Introduceti numele fisierului: ";
                 std::string numeFisier;
-                std::getline(std::cin, numeFisier);
+                std::getline(cin, numeFisier);
                 calculator.citireEcuatiiFisier(numeFisier);
                 break;
             }
@@ -64,10 +64,10 @@ int main(int argc, char* argv[]) {
                 calculator.afiseazaRezultateSalvate();
                 break;
             case 6:
-                std::cout << "La revedere!\n";
+                cout << "La revedere!\n";
                 break;
             default:
-                std::cerr << "Optiune invalida.\n";
+                cerr << "Optiune invalida.\n";
             }
         } while (optiune != 6);
     }

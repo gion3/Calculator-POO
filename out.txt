@@ -1,3 +1,8 @@
-0
-10
-1.0006
+Rezultatul expresiei [1]: 0
+Rezultatul expresiei [3]: 10
+Rezultatul expresiei [4]: 1.0006
+Rezultatul expresiei [5]: 4
+Rezultatul expresiei [6]: 4
+Rezultatul expresiei [7]: 16
+Rezultatul expresiei [8]: 1.4142
+Rezultatul expresiei [9]: 3569481.8930
